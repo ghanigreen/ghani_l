@@ -1,0 +1,54 @@
+
+
+SPL> index=_internal sourcetype=splunkd
+
+https://github.com/splunk/eventgen/
+
+C:\> xcopy SA-Eventgen C:\Splunk\etc\apps\SA-Eventgen /O /X /E /H /K
+C:\> dir C:\Splunk\etc\apps\SA-Eventgen
+
+C:\> cd C:\Splunk\bin
+
+C:\Splunk\bin>splunk restart
+
+splunk status   #Tells you whether splunkd is running or not
+splunk stop		# Stops splunkd and all its processes
+splunk start	# Starts splunkd and all its processes
+splunk restart	# Restarts splunkd and all its processes
+
+https://github.com/PacktPublishing/Splunk-7-Essentials-Third-Edition
+http://github.com/splunk/eventgen
+
+C:\> mkdir C:\Splunk\etc\apps\destinations\samples
+
+copy C:\splunk-essentials-master\labs\chapter01\eventgen\*.sample C:\Splunk\etc\apps\destinations\samples
+
+C:> copy C:\splunk-essentials-master\labs\chapter01\eventgen\eventgen.conf C:\Splunk\etc\apps\destinations\local
+
+C:> icacls C:\Splunk\etc\apps\destinations\local\eventgen.conf /grant SYSTEM:F
+
+SPL> index=main
+
+SPL> index=main /booking/confirmation earliest=-24h@h | timechart count span=15m
+
+Streaming data is almost always being generated, with a timestamp associated to each entry. 
+Splunk's inherent ability to monitor and track data loaded from ever growing log files, or accept data as it arrives on a port, are critical pieces of functionality.
+	
+The term latency, in regards to data, refers to the time it takes from data being captured to it being available for reporting any analysis.
+
+Splunk is also excellent for dealing with sparse data. Much data in retailing environments is considered sparse. 
+
+Splunk was invented as a way to keep track of and analyze machine data coming from a variety of computerized systems. 
+
+Splunk's data capability is focused on machine data.
+
+Web logs are invaluable sources of information for anyone interested in learning about how their website is used.
+
+Splunk can read data from basically all types of files. Splunk can also decompress the following types of files: tar, gz, bz2, tar.gz, tgz, tbz, tbz2, zip, and z, along with many others.
+
+
+ coldPath, homePath, and thawedPath
+
+
+
+

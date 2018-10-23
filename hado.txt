@@ -1,0 +1,89 @@
+
+HDFS, Sqoop and Hive
+
+Storing, querying, indexing, transferring, streaming, and messaging
+
+ 
+HDFS 			- Distributedistributed, portable filesystem, - High throughput streaming data access to applications that processes large datasets.
+				  HDFS's main benefits are that it is fault-tolerant and designed to be run on commodity hardware
+ 
+Mapreduce 		- Distributed, fault tolerant framework designed for processing large quantities of data stored in HDFS, in parallel on large clusters using oommodity hardware
+ 
+Apache Hive 	- Which is a data warehouse for managing large datasets stored in HDFS. Hive provides a HiveQL language
+				  The data could be stored in one of the several supported formats, such as Avro , ORC, RCFile , Parquet , and SequenceFile.
+			 	  Default is TextFile.
+				
+Apache HBase	- Hadoop database is called HBase. HBase is a distributed, scalable NoSQL data store providing real-time access to big data.
+
+Apache Sqoop    - Apache Sqoop, a tool for bulk transfer of data between relational databases such as Oracle database and MySQL database and HDFS.
+				  Sqoop also supports bulk transfer of data from RDBMS to Hive and HBase.
+ 
+Apache flume    - Apache Flume, a distributed, fault-tolerant framework for collecting, aggregating, and streaming large datasets, 
+				  Which are typically log data, but could be from other data sources such as relational databases.
+ 
+Apache Avro  	- Apache Avro, a schema based data serialization system providing varied data structures. 
+				  Avro provides a compact, fast, binary data format typically used to store persistent data.
+				  
+Apache Parquet	- Data format.
+				  Parquet is a columnar data storage format providing complex data structures and efficient compression and encoding on columnar data to any Hadoop ecosystem project.
+				  
+Apache Kafka	- Distributed publish-subscribe messaging system.
+				  Fast, scalable and durable
+				  Kafka is designed to process large quantities of data and provide high throughput rates.
+
+Apache Solr		- Distributed, scalable, and fault-tolerant framework.
+				  Solr provides indexing and data integration for large datasets stored in HDFS, Hive, HBase, or relational databases. 
+				  Solr is Lucene-based and one of the most commonly used search engines. 
+
+Apache mahout	- Framework for machine learning applications.
+				  Mahout supports several machine-learning systems, such as classification, clustering, and recommender systems.
+
+				  MapReduce processes data stored in HDFS
+				  HBase and Hive store data in HDFS by default
+				  Sqoop could be used to bulk transfer data from a relational database management system (RDBMS) to HDFS, Hive, and HBase.
+				  Sqoop also supports bulk transfer of data from HDFS to a relational database
+				  Flume, which is based on sources and sinks, supports several kinds of sources and sinks with the emphasis being on streaming data in real time in contrast to one-time bulk transferring with Sqoop.
+				  Flume is typically used to stream log data and the sink could be HDFS, Hive, HBase, or Solr.
+				  Solr could be used to index data from HDFS, Hive, HBase, and RDBMS.
+				  HDFS stores data in a disk filesystem and is in fact an abstract filesystem on top of the disk filesystem.
+				  Solr also stores data in a disk filesystem by default, but can also store the indexed data in HDFS.
+				  
+				  
+				  
+Amazon EMR
+				  
+They must contain only lowercase letters, numbers, periods (.), and hyphens (-).
+They cannot end in numbers.
+
+
+Secure Shell protocol
+
+https://console.aws.amazon.com/ec2/
+https://console.aws.amazon.com/elasticmapreduce/
+
+Amazon Elastic MapReduce (Amazon EMR) is a web service that enables businesses, researchers, data analysts, and developers to easily and cost-effectively process vast amounts of data
+
+
+Create cluster
+
+Clustername, (logging) , launch mode (cluster, Step execution), Software configuration ( Core hadoop, HBase, Presto, Spark)
+
+Core Hadoop: Hadoop 2.8.4 with Ganglia 3.7.2, Hive 2.3.3, Hue 4.2.0, Mahout 0.13.0, Pig 0.17.0, and Tez 0.8.4
+HBase: HBase 1.4.6 with Ganglia 3.7.2, Hadoop 2.8.4, Hive 2.3.3, Hue 4.2.0, Phoenix 4.14.0, and ZooKeeper 3.4.12
+Presto: Presto 0.206 with Hadoop 2.8.4 HDFS and Hive 2.3.3 Metastore
+Spark: Spark 2.3.1 on Hadoop 2.8.4 YARN with Ganglia 3.7.2 and Zeppelin 0.7.3
+
+
+
+
+
+
+
+
+				  
+				  
+
+ 
+ 
+ 
+ 
