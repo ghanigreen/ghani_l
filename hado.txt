@@ -129,7 +129,7 @@ The components in MR1 are JobTrackerand TaskTracker.
  A fully-distributed Hadoop cluster has one JobTracker and several TaskTrackers and the single JobTracker manages the several TaskTrackers.
  A MR1 Hadoop cluster is illustrated in Figure 2-2; the HDFS components are also shown.
  
- JOBTRACKER
+JOBTRACKER
 The JobTracker is a master component and it manages the jobs and resources in a Hadoop cluster. 
 Clients submit MapReduce (MR) jobs to be run on Hadoop to the JobTracker and the JobTracker schedules and runs the jobs on TaskTrackers . 
 As a MR job would typically process some data, the JobTracker gets the block locations for the data from the NameNode and schedules the jobs to run on TaskTrackers in proximity of the data. 
@@ -144,17 +144,70 @@ MR1 has the following drawbacks:
 
 JobTracker manages and monitors both the resources and the MapReduce Job and task scheduling, 
 which makes the JobTracker a single point of failure (SPOF) in a cluster. The cluster cannot be scaled efficiently.
-
 Underutilization of resources as the slots to run a task are Map and Reduce task specific.
-
 Non-MapReduce applications cannot be run concurrently.
 
 
+To overcome these drawbacks, the MR2 (also called YARN) was designed. MR2 has the following advantages over MR1.
+
+Better scalability as the JobTracker functionality is split between the ResourceManager and ApplicationMaster. Hadoop may be run on much larger clusters with MR2.
+Better cluster utilization as the resource capacity configured for each node may be used by both Map and Reduce tasks.
+Non-MapReduce clusters may be run on the same cluster concurrently.
+Higher throughput uses finer-grained resource scheduling.
 
 
 
 
+RESOURCEMANAGER
+The ResourceManager is a master node and it accepts job submissions from clients and starts processes called ApplicationMaster to run the jobs. 
+The ResourceManager also assigns resources required for a job. A job could be a MapReduce application or a non-MapReduce application. 
+A ResourceManager consists of two components: Scheduler and ApplicationsManager. 
+The Scheduler allocates resources and does not participate in running or monitoring an application. 
+Resources are allocated as resource containers, with each resource container assigned a specific memory. 
+The ApplicationsManager component accepts the job submissions from the clients and starts the ApplicationMaster to run the submitted applications. The ApplicationsManager also restarts failed ApplicationMaster. The ApplicationMasters are application specific, with one ApplicationMaster for each application. After the ApplicationsManager has obtained the resources for an ApplicationMaster to start an application, the ApplicationMaster obtains additional resources if required from the Scheduler component of the ResourceManager directly.
 
+NODEMANAGER
+The NodeManager is a per-machine component that runs resource containers on the machine and monitors the resource usage of the applications running in the resource containers on the machine. The NodeManager also reports the resource usage to the ResourceManager. When the ApplicationMasters start/stop or monitor the status of an application on a resource container, they do so via the NodeManager.
+
+JOB HISTORYSERVER
+Because MR2 does not include a JobTracker to keep information about a MapReduce job and the ApplicationMasters that actually run a MapReduce application terminate on completion, a Job HistoryServeris provided in MR2 to keep the information about the MapReduce jobs submitted (whether failed or successful) to a Hadoop cluster.
+
+
+Setting the Environment
+
+Apache Hadoop (version 2.6.0)
+Java (version 7)
+
+These examples use the Cloudera distribution of Apache Hadoop Cdh5.4.7 Hadoop 2.6.0. 
+A later version may also be used. If you do use a different version, some of the configuration files and directory paths could be different, 
+so be sure to modify the filenames and directory paths accordingly. Create a directory (/cdh for example) to install the software and set its permissions to global (777).
+
+
+
+mkdir /cdh
+chmod -R 777 /cdh
+cd /cdh
+
+Add a group called hadoop and add a user called hadoop to the hadoop group.
+
+groupadd hadoop
+useradd -g hadoop hadoop
+
+
+tar zxvf jdk-7u55-linux-i586.gz
+
+
+Download and extract the tar file for CDH 5.4.7 Hadoop 2.6.0.
+
+wget http://archive-primary.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.4.7.tar.gz
+tar -xvf hadoop-2.6.0-cdh5.4.7.tar.gz
+The CDH 5 packaging and built-in references make it necessary to create symlinks between certain directories. Create the following symlinks.
+
+ln -s /cdh/hadoop-2.6.0-cdh5.4.7/bin /cdh/hadoop-2.6.0-cdh5.4.7/share/hadoop/mapreduce1/bin
+ln -s /cdh/hadoop-2.6.0-cdh5.4.7/etc/hadoop  /cdh/hadoop-2.6.0-cdh5.4.7/share/hadoop/mapreduce1/c
+
+
+A symlinkis just a pointer from one directory to another, implying that when a certain directory is referenced the pointed to, the directory is invoked. By creating the two symlinks, when the /cdh/hadoop-2.6.0-cdh5.4.7/share/hadoop/mapreduce1/bin is referenced or invoked, the /cdh/hadoop-2.6.0-cdh5.4.7/bin directory is referenced or invoked. Similarly, when the /cdh/hadoop-2.6.0-cdh5.4.7/share/hadoop/mapreduce1/conf directory is referenced, the /cdh/hadoop-2.6.0-cdh5.4.7/etc/hadoop directory is invoked.
 
 
 
