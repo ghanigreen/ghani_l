@@ -7,7 +7,7 @@ Storing, querying, indexing, transferring, streaming, and messaging
 HDFS 			- Distributedistributed, portable filesystem, - High throughput streaming data access to applications that processes large datasets.
 				  HDFS's main benefits are that it is fault-tolerant and designed to be run on commodity hardware
  
-Mapreduce 		- Distributed, fault tolerant framework designed for processing large quantities of data stored in HDFS, in parallel on large clusters using oommodity hardware
+Mapreduce 		- Distributed, fault tolerant framework designed for processing large quantities of data stored in HDFS, in parallel on large clusters using commodity hardware
  
 Apache Hive 	- Which is a data warehouse for managing large datasets stored in HDFS. Hive provides a HiveQL language
 				  The data could be stored in one of the several supported formats, such as Avro , ORC, RCFile , Parquet , and SequenceFile.
@@ -48,6 +48,127 @@ Apache mahout	- Framework for machine learning applications.
 				  HDFS stores data in a disk filesystem and is in fact an abstract filesystem on top of the disk filesystem.
 				  Solr also stores data in a disk filesystem by default, but can also store the indexed data in HDFS.
 				  
+
+
+Core Components of Apache Hadoop
+
+Hadoop Distributed Filesystem (HDFS) and MapReduce
+
+
+MapReduce processes input data as key/value pairs
+MapReduce is designed to process medium-to-large files 
+MapReduce has two phases: the map phase and the reduce phase.
+
+The map phase uses one or more mappers to process the input data and the reduce phase uses zero or more reducers to process the data output during the map phase.
+
+The input files is converted to key/value pairs before being input to the map phase. 
+During the map phase, input data consisting of key/value pairs is mapped to output key/value pairs using a user-defined map() function .
+ The map output data is partitioned and sorted for input to the reduce phase.
+ The map output data is partitioned such that values associated with the same key are partitioned to the same partition and sent to the same reducer.
+ During the reduce phase, the data output from the map phase is processed to reduce the number of values associated with a key, or using some other user-defined function.
+
+ 
+Hadoop distributed filesystem
+
+MapReduce framework
+
+Setting the environment
+
+Hadoop cluster modes
+
+Running a MapReduce job with the MR1 framework
+
+Running MR1 in standalone mode
+
+Running MR1 in pseudo-distributed mode
+
+Running MapReduce with the YARN framework
+
+Running YARN in pseudo-distributed mode
+
+Running Hadoop Streaming
+
+
+
+Hadoop Distributed Filesystem
+The Hadoop Distributed Filesystem (HDFS) is a distributed filesystem for storing data in the Hadoop ecosystem. 
+HDFS stores data on commodity hardware and is designed to be fault tolerant, 
+which implies that in a large cluster consisting of several (10s, 100s, or 1000s) nodes, 
+some of the nodes are expected to fail periodically. 
+Data is replicated over the cluster; three times by default in a fully-distributed filesystem. 
+HDFS is different from ordinary distributed filesystems in that it has a much larger storage capacity and is designed to store large datasets. 
+HDFS stores data in blocks, which is an abstraction over the underlying filesystem. 
+The block abstraction is necessary as the size of a block is typically much larger than the size of a block on the underlying filesystem on a disk. 
+An HDFS block is 128MB by default. HDFS consists of two components, called the NameNode and the DataNode. 
+A fully-distributed Hadoop cluster has one NameNode and several DataNodes. The HDFS components are briefly discussed in the following sections.
+
+NAMENODE
+The NameNode is a master component and keeps the naming system of the files and directories managed by a Apache Hadoop cluster. 
+HDFS stores data in blocks and NameNode keeps and manages the block locations of the files/directories.
+NameNode tracks where data is kept, and when a client requests data, NameNode provides the block locations of the data requested. 
+Similarly, when a client wants to store new data, the NameNode provides the block locations at which the data could be stored. 
+NameNode does not store any data itself, nor does it directly access the DataNodes to read and write data.
+
+DATANODES
+The DataNodes store the data in Apache Hadoop. 
+While the NameNode provides the clients with the block locations from which data can be read or at which new data can be stored, the DataNodes read and write requests from the clients. 
+The DataNodes also perform the actual block creation, replication, and deletion duties under instruction from the the NameNode.
+
+MapReduce Framework
+As mentioned in the introduction, Apache Hadoop consists of two frameworks: HDFS and MapReduce.
+ A Hadoop application is a MapReduce application consisting of two phases: the Map phase and the Reduce phase.
+ Data in Hadoop is processed using key/value pairs. 
+ During the Map phase, the input dataset is processed using the specified Map function.
+ Data to the Map phase is typically input from HDFS. 
+ The Map function could be designed to count the number of unique occurrences of a word in a dataset, as you’ll see in a subsequent example. 
+ The Map phase generates an intermediate set of key/value pairs, which are sorted and partitioned and then transferred to the Reduce phase to be processed by a Reduce function.
+ The output from the Reduce function is the output from a MapReduce application. The output from a MapReduce application is typically stored in the HDFS.
+
+Two kinds of MapReduce frameworks are provided: MapReduce 1 (MR1) and YARN (MR2). 
+The components in MR1 are JobTrackerand TaskTracker.
+ A fully-distributed Hadoop cluster has one JobTracker and several TaskTrackers and the single JobTracker manages the several TaskTrackers.
+ A MR1 Hadoop cluster is illustrated in Figure 2-2; the HDFS components are also shown.
+ 
+ JOBTRACKER
+The JobTracker is a master component and it manages the jobs and resources in a Hadoop cluster. 
+Clients submit MapReduce (MR) jobs to be run on Hadoop to the JobTracker and the JobTracker schedules and runs the jobs on TaskTrackers . 
+As a MR job would typically process some data, the JobTracker gets the block locations for the data from the NameNode and schedules the jobs to run on TaskTrackers in proximity of the data. 
+Because large quantities of data are involved, the computation to be performed on a dataset is moved to the data rather than shuffling the dataset to the computation as in a small-scale data processing framework.
+
+TASKTRACKER
+The TaskTracker s run the Map and Reduce tasks for a MapReduce application. A TaskTracker consists of “slots” in which a task runs. The “slots” are Map or Reduce task specific. A Map slot runs only a Map task and a Reduce slot runs only a Reduce task. The TaskTracker runs tasks under instruction from the JobTracker and, when a task completes, the TaskTracker notifies the JobTracker.
+
+
+
+MR1 has the following drawbacks:
+
+JobTracker manages and monitors both the resources and the MapReduce Job and task scheduling, 
+which makes the JobTracker a single point of failure (SPOF) in a cluster. The cluster cannot be scaled efficiently.
+
+Underutilization of resources as the slots to run a task are Map and Reduce task specific.
+
+Non-MapReduce applications cannot be run concurrently.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 				  
 				  
 Amazon EMR
@@ -75,12 +196,18 @@ Spark: Spark 2.3.1 on Hadoop 2.8.4 YARN with Ganglia 3.7.2 and Zeppelin 0.7.3
 
 
 
+The HDFS daemons are the NameNode, Secondary NameNode, and DataNode.
+The NameNode is the master daemon in the HDFS. NameNode’s function is to maintain the HDFS namespace metadata, which includes the filenames, 
+directory names, file permissions, directory permissions, file-to-block mapping, block IDs, and block locations in RAM. 
+
+The metadata is kept in RAM for fast access. NameNode stores the metadata information in a fsimage file in the NameNode’s local filesystem. 
+
+The Secondary NameNode’s function is to make periodic checkpoints of the edits log to the fsimage file while the NameNode is running.
+
+The DataNode is a slave daemon for storing the HDFS data. Data is broken into blocks and stored on the DataNodes. 
 
 
-
-
-
-				  
+				  9884243134
 				  
 
  
